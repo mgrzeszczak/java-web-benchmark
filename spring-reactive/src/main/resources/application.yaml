@@ -1,0 +1,8 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/benchmark
+    username: benchmark
+    password: password
+    pool:
+      initial-size: 5
+      max-size: 20

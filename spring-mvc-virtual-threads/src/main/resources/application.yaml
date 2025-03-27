@@ -2,7 +2,3 @@ spring:
   threads:
     virtual:
       enabled: true
-
-server:
-  tomcat:
-    max-connections: 10000

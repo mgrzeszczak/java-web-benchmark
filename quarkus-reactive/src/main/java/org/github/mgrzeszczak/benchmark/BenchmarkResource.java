@@ -1,51 +1,55 @@
 package org.github.mgrzeszczak.benchmark;
 
-import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
-import io.r2dbc.postgresql.PostgresqlConnectionFactory;
-import io.r2dbc.spi.ConnectionFactories;
-import io.r2dbc.spi.ConnectionFactory;
 import io.smallrye.mutiny.Uni;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.file.AsyncFile;
+import io.vertx.core.file.OpenOptions;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import org.jooq.ConnectionProvider;
 import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Path("/api/benchmark")
 public class BenchmarkResource {
 
+    private final Vertx vertx;
+
+    public BenchmarkResource(Vertx vertx) {
+        this.vertx = vertx;
+    }
+
     @Path("/static")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
+    public Uni<String> hello() {
+        return Uni.createFrom().item("OK");
+    }
 
-//        ctx.transactionPublisher(it -> {
-//            it.dsl()
-//        })
-        PostgresqlConnectionFactory connectionFactory = new PostgresqlConnectionFactory(
-                PostgresqlConnectionConfiguration.builder()
-                        .host("localhost")
-                        .port(5432)
-                        .username("postgres")
-                        .password("thirumal")
-                        .database("sample")
-                        .build());
-
-        DSLContext ctx = DSL.using(connectionFactory);
-
-        Uni<Record1<Integer>> result = Uni.createFrom()
-                .publisher(ctx.transactionPublisher(it -> it.dsl().select(DSL.val(1))));
-
-//        ctx.transactionPublisher(trx -> trx.dsl())
-
-
-
-        return "hello world";
+    @Path("/file-system-read")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Uni<Integer> fileSystemRead() {
+//        return Uni.createFrom().<byte[]>item(() -> {
+//            try {
+//                return Files.readAllBytes(Paths.get("../file.dat"));
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }).map(result -> result.length);
+        return Uni.createFrom().<Integer>emitter(emitter -> {
+            vertx.fileSystem()
+                    .readFile("../file.dat")
+                    .onSuccess(it -> emitter.complete(it.length()))
+                    .onFailure(emitter::fail);
+        });
     }
 
 }

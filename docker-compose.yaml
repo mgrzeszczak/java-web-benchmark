@@ -1,4 +1,16 @@
 services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: benchmark
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: benchmark
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
   spring-reactive:
     container_name: spring-reactive
     image: docker.io/library/spring-reactive:local
@@ -12,3 +24,8 @@ services:
       context: .
       args:
         JAR_FILE: spring-reactive/target/*.jar
+
+
+volumes:
+  postgres_data:
+    driver: local
