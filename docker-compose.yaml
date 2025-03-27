@@ -1,0 +1,14 @@
+services:
+  spring-reactive:
+    container_name: spring-reactive
+    image: docker.io/library/spring-reactive:local
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 150M
+    build:
+      context: .
+      args:
+        JAR_FILE: spring-reactive/target/*.jar
