@@ -24,7 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 2000M
     volumes:
       - ./file.dat:/file.dat
     build:
@@ -41,7 +41,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 2000M
     volumes:
       - ./file.dat:/file.dat
     build:
@@ -58,7 +58,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 2000M
     volumes:
       - ./file.dat:/file.dat
     build:
@@ -76,7 +76,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 2000M
     volumes:
       - ./file.dat:/file.dat
     build:
