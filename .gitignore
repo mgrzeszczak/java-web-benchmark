@@ -1,5 +1,6 @@
 reports
 file.dat
+.venv
 
 #Maven
 target/
