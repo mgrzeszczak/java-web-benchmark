@@ -2,28 +2,24 @@ package org.github.mgrzeszczak.benchmark;
 
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.file.AsyncFile;
-import io.vertx.core.file.OpenOptions;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import org.jooq.DSLContext;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/api/benchmark")
 public class BenchmarkResource {
 
     private final Vertx vertx;
+    private final String filePath;
 
-    public BenchmarkResource(Vertx vertx) {
+    public BenchmarkResource(
+            @ConfigProperty(name = "benchmark.file") String filePath,
+            Vertx vertx
+    ) {
         this.vertx = vertx;
+        this.filePath = filePath;
     }
 
     @Path("/static")
@@ -46,7 +42,7 @@ public class BenchmarkResource {
 //        }).map(result -> result.length);
         return Uni.createFrom().<Integer>emitter(emitter -> {
             vertx.fileSystem()
-                    .readFile("../file.dat")
+                    .readFile(filePath)
                     .onSuccess(it -> emitter.complete(it.length()))
                     .onFailure(emitter::fail);
         });

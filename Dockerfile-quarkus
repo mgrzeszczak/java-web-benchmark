@@ -1,0 +1,4 @@
+FROM amazoncorretto:21-alpine
+ARG QUARKUS_APP_PATH
+COPY $QUARKUS_APP_PATH quarkus-app
+ENTRYPOINT ["java","-XX:+ExitOnOutOfMemoryError","-jar","quarkus-app/quarkus-run.jar"]

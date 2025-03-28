@@ -16,15 +16,74 @@ services:
     image: docker.io/library/spring-reactive:local
     ports:
       - "8080:8080"
+    environment:
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/benchmark
+      SPRING_R2DBC_USERNAME: benchmark
+      SPRING_R2DBC_PASSWORD: password
+      BENCHMARK_FILE: /file.dat
     deploy:
       resources:
         limits:
-          memory: 150M
+          memory: 1024M
+    volumes:
+      - ./file.dat:/file.dat
     build:
       context: .
       args:
         JAR_FILE: spring-reactive/target/*.jar
-
+  spring-mvc-virtual-threads:
+    container_name: spring-mvc-virtual-threads
+    image: docker.io/library/spring-mvc-virtual-threads:local
+    environment:
+      BENCHMARK_FILE: /file.dat
+    ports:
+      - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    volumes:
+      - ./file.dat:/file.dat
+    build:
+      context: .
+      args:
+        JAR_FILE: spring-mvc-virtual-threads/target/*.jar
+  spring-mvc:
+    container_name: spring-mvc
+    image: docker.io/library/spring-mvc:local
+    environment:
+      BENCHMARK_FILE: /file.dat
+    ports:
+      - "8082:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    volumes:
+      - ./file.dat:/file.dat
+    build:
+      context: .
+      args:
+        JAR_FILE: spring-mvc/target/*.jar
+  quarkus-reactive:
+    container_name: quarkus-reactive
+    image: docker.io/library/quarkus-reactive:local
+    environment:
+      DB_HOST: postgres
+      BENCHMARK_FILE: /file.dat
+    ports:
+      - "8083:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    volumes:
+      - ./file.dat:/file.dat
+    build:
+      context: .
+      dockerfile: Dockerfile-quarkus
+      args:
+        QUARKUS_APP_PATH: quarkus-reactive/target/quarkus-app
 
 volumes:
   postgres_data:
