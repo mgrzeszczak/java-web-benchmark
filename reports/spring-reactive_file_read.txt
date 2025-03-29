@@ -1,0 +1,8 @@
+Running 1m test @ http://localhost:8080/api/benchmark/file-system-read
+  12 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    53.24ms   55.79ms 444.74ms   84.49%
+    Req/Sec   103.79     88.75   580.00     90.16%
+  54745 requests in 1.00m, 4.07MB read
+Requests/sec:    911.73
+Transfer/sec:     69.45KB

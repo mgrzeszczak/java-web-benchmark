@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+java -XX:+ExitOnOutOfMemoryError -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=5050 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false $JAVA_OPTIONS -jar $1
