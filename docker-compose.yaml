@@ -16,15 +16,13 @@ services:
     image: docker.io/library/spring-reactive:local
     ports:
       - "8080:8080"
+      - "5050:5050"
     environment:
       SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/benchmark
       SPRING_R2DBC_USERNAME: benchmark
       SPRING_R2DBC_PASSWORD: password
       BENCHMARK_FILE: /file.dat
-    deploy:
-      resources:
-        limits:
-          memory: 2000M
+    command: '-Xms512m -Xmx1024m'
     volumes:
       - ./file.dat:/file.dat
     build:
@@ -38,10 +36,8 @@ services:
       BENCHMARK_FILE: /file.dat
     ports:
       - "8081:8080"
-    deploy:
-      resources:
-        limits:
-          memory: 2000M
+      - "5051:5050"
+    command: '-Xms512m -Xmx1024m'
     volumes:
       - ./file.dat:/file.dat
     build:
@@ -55,10 +51,8 @@ services:
       BENCHMARK_FILE: /file.dat
     ports:
       - "8082:8080"
-    deploy:
-      resources:
-        limits:
-          memory: 2000M
+      - "5052:5050"
+    command: '-Xms512m -Xmx1024m'
     volumes:
       - ./file.dat:/file.dat
     build:
@@ -73,10 +67,8 @@ services:
       BENCHMARK_FILE: /file.dat
     ports:
       - "8083:8080"
-    deploy:
-      resources:
-        limits:
-          memory: 2000M
+      - "5053:5050"
+    command: '-Xms512m -Xmx1024m'
     volumes:
       - ./file.dat:/file.dat
     build:

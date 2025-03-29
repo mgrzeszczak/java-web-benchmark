@@ -19,3 +19,6 @@ pip install -r requirements.txt
 source .venv/bin/activate
 ./script.sh
 ```
+
+## Report
+[View the report](reports/report.md)
